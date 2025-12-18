@@ -5,7 +5,7 @@ namespace AMWhalen\ArchiveMyTweets;
 require_once 'tweet.php';
 
 /**
- * Interacts with the Twitter API to archive tweets for an account.
+ * Interacts with the Twitter API v2 to archive tweets for an account.
  */
 class Archiver {
 
@@ -15,8 +15,12 @@ class Archiver {
 
     /**
      * Constructor
+     * 
+     * @param string $username Twitter username
+     * @param TwitterV2|\TijsVerkoyen\Twitter\Twitter $twitter Twitter API client
+     * @param Model $model Database model
      */
-    public function __construct($username, \TijsVerkoyen\Twitter\Twitter $twitter, Model $model) {
+    public function __construct($username, $twitter, Model $model) {
 
         $this->username = $username;
         $this->twitter  = $twitter;
@@ -25,20 +29,19 @@ class Archiver {
     }
 
     /**
-     * Grabs all the latest tweets (up to 3200 because of API limits) and puts them into the database.
+     * Grabs all the latest tweets and puts them into the database.
+     * Note: API v2 free tier is limited to 1,500 tweets per month.
      *
      * @return string Returns a string with informational output.
      */
     public function archive() {
 
-        // this should use a maximum of 16 API calls if the user has 3200+ tweets
-
-        // api params
+        // API v2 params
         $maxId              = null;
         $sinceId            = null;
         $userId             = null; // not needed if using screen name
         $screenName         = $this->username;
-        $count              = 200;
+        $count              = 100; // API v2 max is 100 per request
         $trimUser           = null;
         $excludeReplies     = false;
         $contributorDetails = true;

@@ -166,12 +166,12 @@ class ArchiverTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	/**
-	 * Constructs and returns a mock Twitter
+	 * Constructs and returns a mock TwitterV2 client
 	 */
 	protected function getMockTwitter() {
 
-		// Create a Mock Object for the Twitter class
-		$twitter = $this->getMockBuilder('TijsVerkoyen\Twitter\Twitter')
+		// Create a Mock Object for the TwitterV2 class
+		$twitter = $this->getMockBuilder('AMWhalen\ArchiveMyTweets\TwitterV2')
 			->disableOriginalConstructor()
 			->getMock();
 

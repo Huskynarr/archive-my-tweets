@@ -10,11 +10,17 @@ define('TWITTER_NAME',     ''); // e.g. Andrew M. Whalen (your display name)
 // The URL for your installation of archive-my-tweets
 define('BASE_URL', ''); // e.g. http://amwhalen.com/twitter/ (start with http:// and have a slash at the end)
 
-// consumer (application) credentials
-define('TWITTER_CONSUMER_KEY',    ''); // register at https://developer.x.com/en/apps
-define('TWITTER_CONSUMER_SECRET', '');
+// X API v2 credentials (free tier)
+// Register at https://developer.x.com/en/apps
+// The free tier uses OAuth 2.0 Bearer Token authentication
+define('TWITTER_CONSUMER_KEY',    ''); // API Key
+define('TWITTER_CONSUMER_SECRET', ''); // API Secret
 
-// OAuth Tokens
+// Bearer Token for API v2 (recommended)
+// You can generate this in the X Developer Portal or leave empty to auto-generate
+define('TWITTER_BEARER_TOKEN', '');
+
+// Legacy OAuth 1.0a Tokens (optional, not required for API v2 free tier)
 define('TWITTER_OAUTH_TOKEN',  '');
 define('TWITTER_OAUTH_SECRET', '');
 

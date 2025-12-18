@@ -9,6 +9,9 @@ require_once 'amt/importer.php';
 require_once 'amt/archiver.php';
 require_once 'amt/app.php';
 require_once 'amt/tweet.php';
+require_once 'amt/twitter_v2.php';
+
+// Legacy Twitter OAuth library (kept for backward compatibility)
 require_once 'vendor/tijsverkoyen/TwitterOAuth/Twitter.php';
 require_once 'vendor/tijsverkoyen/TwitterOAuth/Exception.php';
 
@@ -23,6 +26,7 @@ if (file_exists(dirname(__FILE__).'/config.php')) {
 		'auth' => array(
 			'consumerKey'    => TWITTER_CONSUMER_KEY,
 			'consumerSecret' => TWITTER_CONSUMER_SECRET,
+			'bearerToken'    => defined('TWITTER_BEARER_TOKEN') ? TWITTER_BEARER_TOKEN : '',
 			'oauthToken'     => TWITTER_OAUTH_TOKEN,
 			'oauthSecret'    => TWITTER_OAUTH_SECRET
 		),
