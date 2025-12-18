@@ -23,4 +23,4 @@ vendor/nikic
 vendor/phar-io
 vendor/phpunit
 vendor/sebastian
-vendor/theseer
+vendor/theseer.phpunit.result.cache
