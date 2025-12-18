@@ -12,6 +12,7 @@ build/pdepend
 build/phpdox
 build/build
 cache.properties
+.phpunit.result.cache
 
 # Composer files (but keep tijsverkoyen library)
 composer.lock
@@ -23,4 +24,4 @@ vendor/nikic
 vendor/phar-io
 vendor/phpunit
 vendor/sebastian
-vendor/theseer.phpunit.result.cache
+vendor/theseer
