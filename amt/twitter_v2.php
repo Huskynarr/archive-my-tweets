@@ -128,13 +128,15 @@ class TwitterV2
             CURLOPT_SSL_VERIFYHOST => 2
         ];
         
-        $this->curl = curl_init();
-        curl_setopt_array($this->curl, $options);
+        // Use a dedicated curl handle for OAuth token requests
+        $curlOAuth = curl_init();
+        curl_setopt_array($curlOAuth, $options);
         
-        $response = curl_exec($this->curl);
-        $httpCode = curl_getinfo($this->curl, CURLINFO_HTTP_CODE);
-        $errorNumber = curl_errno($this->curl);
-        $errorMessage = curl_error($this->curl);
+        $response = curl_exec($curlOAuth);
+        $httpCode = curl_getinfo($curlOAuth, CURLINFO_HTTP_CODE);
+        $errorNumber = curl_errno($curlOAuth);
+        $errorMessage = curl_error($curlOAuth);
+        curl_close($curlOAuth);
         
         if ($errorNumber !== 0) {
             throw new \Exception('cURL error: ' . $errorMessage, $errorNumber);
@@ -143,7 +145,12 @@ class TwitterV2
         $json = json_decode($response, true);
         
         if ($httpCode !== 200 || !isset($json['access_token'])) {
-            $error = $json['error'] ?? $json['errors'][0]['message'] ?? 'Failed to obtain Bearer Token';
+            $error = 'Failed to obtain Bearer Token';
+            if (isset($json['error'])) {
+                $error = $json['error'];
+            } elseif (isset($json['errors']) && is_array($json['errors']) && !empty($json['errors'])) {
+                $error = $json['errors'][0]['message'] ?? $error;
+            }
             throw new \Exception($error);
         }
         
@@ -223,7 +230,7 @@ class TwitterV2
         }
         
         // Check for API errors
-        if (isset($json['errors'])) {
+        if (isset($json['errors']) && is_array($json['errors']) && !empty($json['errors'])) {
             $errorMsg = $json['errors'][0]['message'] ?? 'Unknown API error';
             throw new \Exception($errorMsg);
         }
@@ -242,20 +249,22 @@ class TwitterV2
         
         foreach (explode("\r\n", $headers) as $line) {
             if (strpos($line, ':') !== false) {
-                list($key, $value) = explode(': ', $line, 2);
-                $key = strtolower(trim($key));
-                $value = trim($value);
-                
-                switch ($key) {
-                    case 'x-rate-limit-limit':
-                        $rateLimitStatus['limit'] = (int)$value;
-                        break;
-                    case 'x-rate-limit-remaining':
-                        $rateLimitStatus['remaining'] = (int)$value;
-                        break;
-                    case 'x-rate-limit-reset':
-                        $rateLimitStatus['reset'] = (int)$value;
-                        break;
+                $parts = explode(':', $line, 2);
+                if (count($parts) === 2) {
+                    $key = strtolower(trim($parts[0]));
+                    $value = trim($parts[1]);
+                    
+                    switch ($key) {
+                        case 'x-rate-limit-limit':
+                            $rateLimitStatus['limit'] = (int)$value;
+                            break;
+                        case 'x-rate-limit-remaining':
+                            $rateLimitStatus['remaining'] = (int)$value;
+                            break;
+                        case 'x-rate-limit-reset':
+                            $rateLimitStatus['reset'] = (int)$value;
+                            break;
+                    }
                 }
             }
         }
