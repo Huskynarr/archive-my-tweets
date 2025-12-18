@@ -2,7 +2,7 @@
 
 namespace AMWhalen\ArchiveMyTweets;
 
-class ControllerTest extends \PHPUnit_Framework_TestCase {
+class ControllerTest extends \PHPUnit\Framework\TestCase {
 
 	protected $model;
 	protected $view;
@@ -12,7 +12,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase {
 	protected $recentTweets;
 	protected $fakeData;
 
-	public function setUp() {
+	public function setUp(): void {
 
 		$this->latestTweet = array(
 			'id' => 293780221621067776,
@@ -101,12 +101,31 @@ class ControllerTest extends \PHPUnit_Framework_TestCase {
 		$_GET = array();
 		$_GET['q'] = 'aardvark';
 
-		$model = $this->model;
+		// Create a new mock model for this specific test
+		$model = $this->getMockBuilder('AMWhalen\ArchiveMyTweets\Model')
+			->disableOriginalConstructor()
+			->getMock();
 
-		// search
-		// calls 0-6 are at the top of the index() controller method
-		$model->expects($this->at(7))->method('getSearchResults')->will($this->returnValue($this->recentTweets));
-		$model->expects($this->at(8))->method('getSearchResults')->will($this->returnValue(1));
+		// Set up all the standard returns
+		$model->expects($this->any())->method('getTweets')->will($this->returnValue($this->recentTweets));
+		$model->expects($this->any())->method('getTweet')->will($this->returnValue($this->latestTweet));
+		$model->expects($this->any())->method('getTweetsByClient')->will($this->returnValue($this->recentTweets));
+		$model->expects($this->any())->method('getTweetsByClientCount')->will($this->returnValue(1));
+		$model->expects($this->any())->method('getFavoriteTweets')->will($this->returnValue($this->recentTweets));
+		$model->expects($this->any())->method('getTweetsByMonth')->will($this->returnValue($this->recentTweets));
+		$model->expects($this->any())->method('getTweetsByMonthCount')->will($this->returnValue(1));
+		$model->expects($this->any())->method('getTwitterMonths')->will($this->returnValue(array()));
+		$model->expects($this->any())->method('getTwitterClients')->will($this->returnValue(array()));
+		$model->expects($this->any())->method('getMostTweetsInAMonth')->will($this->returnValue(1));
+		$model->expects($this->any())->method('getTotalTweets')->will($this->returnValue(1));
+		$model->expects($this->any())->method('getTotalFavoriteTweets')->will($this->returnValue(0));
+		$model->expects($this->any())->method('getTotalClients')->will($this->returnValue(1));
+		$model->expects($this->any())->method('getMostPopularClientTotal')->will($this->returnValue(1));
+
+		// search - use consecutive calls for the two getSearchResults calls
+		$model->expects($this->any())
+			->method('getSearchResults')
+			->willReturnOnConsecutiveCalls($this->recentTweets, 1);
 
 		$controller = new Controller($model, $this->view, $this->paginator, $this->fakeData);
 

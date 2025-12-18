@@ -8,14 +8,12 @@ class MockPDO extends PDO {
 	public function __construct() {}
 }
 
-class ModelTest extends \PHPUnit_Framework_TestCase {
+class ModelTest extends \PHPUnit\Framework\TestCase {
 
 	protected $db;
 
-	public function setUp() {
-		$this->db = $this->getMockBuilder('MockPDO')
-			->disableOriginalConstructor()
-			->getMock();
+	public function setUp(): void {
+		$this->db = $this->createMock(MockPDO::class);
 	}
 
 	public function testTableName() {

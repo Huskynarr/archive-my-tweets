@@ -288,9 +288,9 @@ class Installer {
             'errors' => array()
         );
 
-        // Requirement: PHP 5.3
-        if (version_compare(phpversion(), '5.3.0') < 0) {
-            $problems['errors'][] = 'PHP 5.3.0 or greater is required. Your installed version is '.phpversion().'.';
+        // Requirement: PHP 8.1+
+        if (version_compare(phpversion(), '8.1.0') < 0) {
+            $problems['errors'][] = 'PHP 8.1.0 or greater is required. Your installed version is '.phpversion().'.';
         }
 
         // Requirement: PDO

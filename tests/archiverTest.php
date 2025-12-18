@@ -2,7 +2,7 @@
 
 namespace AMWhalen\ArchiveMyTweets;
 
-class ArchiverTest extends \PHPUnit_Framework_TestCase {
+class ArchiverTest extends \PHPUnit\Framework\TestCase {
 
 	protected $username;
 	protected $model;
@@ -10,7 +10,7 @@ class ArchiverTest extends \PHPUnit_Framework_TestCase {
 	protected $latestTweet;
 	protected $arrayOfTweets;
 
-	public function setUp() {
+	public function setUp(): void {
 		
 		require_once dirname(__FILE__) . '/../includes.php';
 
@@ -190,15 +190,10 @@ class ArchiverTest extends \PHPUnit_Framework_TestCase {
 
 		$twitter = $this->getMockTwitter();
 
-		// Calling $twitter->statusesUserTimeline() will return an array the first time
-		$twitter->expects($this->at(0))
+		// Use willReturnOnConsecutiveCalls for sequential returns
+		$twitter->expects($this->any())
 			->method('statusesUserTimeline')
-			->will($this->returnValue($this->arrayOfTweets));
-
-		// Calling $twitter->statusesUserTimeline() will return an empty array the second time
-		$twitter->expects($this->at(2))
-			->method('statusesUserTimeline')
-			->will($this->returnValue(array()));
+			->willReturnOnConsecutiveCalls($this->arrayOfTweets, array());
 
 		return $twitter;
 
@@ -211,15 +206,10 @@ class ArchiverTest extends \PHPUnit_Framework_TestCase {
 
 		$twitter = $this->getMockTwitter();
 
-		// Calling $twitter->statusesUserTimeline() will return an array the first time
-		$twitter->expects($this->at(0))
+		// Use willReturnOnConsecutiveCalls for sequential returns
+		$twitter->expects($this->any())
 			->method('statusesUserTimeline')
-			->will($this->returnValue(array($this->latestTweet)));
-
-		// Calling $twitter->statusesUserTimeline() will return an empty array the second time
-		$twitter->expects($this->at(2))
-			->method('statusesUserTimeline')
-			->will($this->returnValue(array()));
+			->willReturnOnConsecutiveCalls(array($this->latestTweet), array());
 
 		return $twitter;
 
@@ -232,22 +222,21 @@ class ArchiverTest extends \PHPUnit_Framework_TestCase {
 
 		$twitter = $this->getMockTwitter();
 
-		// remember to include the calls to getLastRateLimitStatus() for the at() indexes
-
-		// Calling $twitter->statusesUserTimeline() will return an array the first time
-		$twitter->expects($this->at(0))
+		// Use willReturnCallback to handle mixed returns and exceptions
+		$callCount = 0;
+		$arrayOfTweets = $this->arrayOfTweets;
+		$twitter->expects($this->any())
 			->method('statusesUserTimeline')
-			->will($this->returnValue($this->arrayOfTweets));
-
-		// Throw an exception!
-		$twitter->expects($this->at(2))
-			->method('statusesUserTimeline')
-			->will($this->throwException(new \Exception('Fake Twitter API Exception!')));
-
-		// Calling $twitter->statusesUserTimeline() will return an empty array the second time
-		$twitter->expects($this->at(4))
-			->method('statusesUserTimeline')
-			->will($this->returnValue(array()));
+			->willReturnCallback(function() use (&$callCount, $arrayOfTweets) {
+				$callCount++;
+				if ($callCount === 1) {
+					return $arrayOfTweets;
+				} elseif ($callCount === 2) {
+					throw new \Exception('Fake Twitter API Exception!');
+				} else {
+					return array();
+				}
+			});
 
 		return $twitter;
 
@@ -260,10 +249,10 @@ class ArchiverTest extends \PHPUnit_Framework_TestCase {
 
 		$twitter = $this->getMockTwitter();
 
-		// Calling $twitter->statusesUserTimeline() will return an array the first time
-		$twitter->expects($this->at(0))
+		// Calling $twitter->statusesUserTimeline() will return an empty array
+		$twitter->expects($this->any())
 			->method('statusesUserTimeline')
-			->will($this->returnValue(array()));
+			->willReturn(array());
 
 		return $twitter;
 
@@ -281,15 +270,10 @@ class ArchiverTest extends \PHPUnit_Framework_TestCase {
 			$lotsOfTweets[] = array('id' => $i);
 		}
 
-		// Calling $twitter->statusesUserTimeline() will return an array the first time
-		$twitter->expects($this->at(0))
+		// Use willReturnOnConsecutiveCalls for sequential returns
+		$twitter->expects($this->any())
 			->method('statusesUserTimeline')
-			->will($this->returnValue($lotsOfTweets));
-
-		// Calling $twitter->statusesUserTimeline() will return an empty array the second time
-		$twitter->expects($this->at(2))
-			->method('statusesUserTimeline')
-			->will($this->returnValue(array()));
+			->willReturnOnConsecutiveCalls($lotsOfTweets, array());
 
 		return $twitter;
 

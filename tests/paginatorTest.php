@@ -2,11 +2,11 @@
 
 namespace AMWhalen\ArchiveMyTweets;
 
-class PaginatorTest extends \PHPUnit_Framework_TestCase {
+class PaginatorTest extends \PHPUnit\Framework\TestCase {
 
 	protected $baseUrl;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->baseUrl = 'http://amwhalen.com/twitter/';
 	}
 

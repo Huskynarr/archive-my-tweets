@@ -379,7 +379,7 @@ class Model {
      */
     public function install() {
 
-        $stmt = $this->db->prepare('create table '.$this->table.' ( id bigint(20) unsigned not null unique, user_id bigint(20) unsigned not null, created_at datetime not null, tweet varchar(140), source varchar(255), truncated tinyint(1), favorited tinyint(1), in_reply_to_status_id bigint(20), in_reply_to_user_id bigint(20), in_reply_to_screen_name varchar(15), index(source) ) ENGINE=MyISAM DEFAULT CHARSET=utf8;');
+        $stmt = $this->db->prepare('create table '.$this->table.' ( id bigint(20) unsigned not null unique, user_id bigint(20) unsigned not null, created_at datetime not null, tweet varchar(500), source varchar(255), truncated tinyint(1), favorited tinyint(1), in_reply_to_status_id bigint(20), in_reply_to_user_id bigint(20), in_reply_to_screen_name varchar(15), index(source) ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;');
 
         // TODO: run SQL updates here, each in its own function
 

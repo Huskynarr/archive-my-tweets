@@ -2,11 +2,11 @@
 
 namespace AMWhalen\ArchiveMyTweets;
 
-class ViewTest extends \PHPUnit_Framework_TestCase {
+class ViewTest extends \PHPUnit\Framework\TestCase {
 
 	protected $templateDirectory;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->templateDirectory = dirname(__FILE__) . '/views';
 		require_once dirname(__FILE__) . '/../includes.php';
 	}
@@ -34,20 +34,20 @@ class ViewTest extends \PHPUnit_Framework_TestCase {
 
 	/**
 	 * Test bad directory exception
-	 * @expectedException Exception
 	 */
 	public function testDirectoryException() {
 
+		$this->expectException(\Exception::class);
 		$view = new View($this->templateDirectory.'/not_a_real_directory');
 
 	}
 
 	/**
 	 * Test bad template exception
-	 * @expectedException Exception
 	 */
 	public function testTemplateException() {
 
+		$this->expectException(\Exception::class);
 		$view = new View($this->templateDirectory);
 		$view->render($this->templateDirectory.'/not_a_real_template.php');
 

@@ -3,15 +3,15 @@
 // timezone, see: http://php.net/manual/en/timezones.php
 date_default_timezone_set(''); // e.g. America/New_York
 
-// twitter
-define('TWITTER_USERNAME', ''); // e.g. awhalen
-define('TWITTER_NAME',     ''); // e.g. Andrew M. Whalen
+// X (formerly Twitter) settings
+define('TWITTER_USERNAME', ''); // e.g. awhalen (your X username)
+define('TWITTER_NAME',     ''); // e.g. Andrew M. Whalen (your display name)
 
 // The URL for your installation of archive-my-tweets
 define('BASE_URL', ''); // e.g. http://amwhalen.com/twitter/ (start with http:// and have a slash at the end)
 
 // consumer (application) credentials
-define('TWITTER_CONSUMER_KEY',    ''); // register at http://dev.twitter.com/apps/
+define('TWITTER_CONSUMER_KEY',    ''); // register at https://developer.x.com/en/apps
 define('TWITTER_CONSUMER_SECRET', '');
 
 // OAuth Tokens
