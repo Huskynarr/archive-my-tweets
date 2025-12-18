@@ -23,12 +23,17 @@ Installation
 Getting X (Twitter) API Tokens
 ------------------------------
 
-Installation requires that you register your "app" with X (Twitter). Below is the process:
+Installation requires that you register your "app" with X (Twitter). The application now uses API v2 (free tier) which has a monthly limit of 1,500 tweets. Below is the process:
 
-1. Visit https://developer.x.com/en/apps and sign in with your X credentials.
-2. Fill in the Name and Description with whatever you'd like.
-3. Fill in the Website and Callback fields with the URL of your archive, e.g. http://amwhalen.com/twitter/.
-4. Save your information and put the keys and tokens into your config.php file.
+1. Visit https://developer.x.com/en/portal/dashboard and sign in with your X credentials.
+2. Create a new Project and App if you don't have one already.
+3. In your App settings, generate the following credentials:
+   - API Key (Consumer Key)
+   - API Secret (Consumer Secret)
+   - Bearer Token (recommended for API v2)
+4. Put these credentials into your config.php file.
+
+Note: The free tier of X API v2 provides read-only access with a limit of 1,500 tweets per month. For archiving older tweets, consider importing your official X archive (see below).
 
 
 Setting Up a Cron Job

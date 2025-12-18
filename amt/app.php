@@ -101,10 +101,16 @@ class App {
      */
     public function archive() {
 
-        // create twitter instance
-        $twitter = new \TijsVerkoyen\Twitter\Twitter($this->config['auth']['consumerKey'], $this->config['auth']['consumerSecret']);
-        $twitter->setOAuthToken($this->config['auth']['oauthToken']);
-        $twitter->setOAuthTokenSecret($this->config['auth']['oauthSecret']);
+        // Create Twitter API v2 instance (for free tier)
+        $bearerToken = !empty($this->config['auth']['bearerToken']) 
+            ? $this->config['auth']['bearerToken'] 
+            : null;
+        
+        $twitter = new TwitterV2(
+            $this->config['auth']['consumerKey'], 
+            $this->config['auth']['consumerSecret'],
+            $bearerToken
+        );
 
         $archiver = new Archiver($this->config['twitter']['username'], $twitter, $this->model);
         return $archiver->archive();
