@@ -2,7 +2,7 @@
 
 namespace AMWhalen\ArchiveMyTweets;
 
-class RouterTest extends \PHPUnit_Framework_TestCase {
+class RouterTest extends \PHPUnit\Framework\TestCase {
 
 	protected $controller;
 	protected $router;
@@ -10,7 +10,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase {
 	// will be changed by a callback method then checked afterwards
 	protected $callbackCalled;
 
-	public function setUp() {
+	public function setUp(): void {
 		
 		require_once dirname(__FILE__) . '/../includes.php';
 

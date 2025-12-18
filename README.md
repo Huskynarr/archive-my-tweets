@@ -1,18 +1,15 @@
-[![Build Status](https://travis-ci.org/amwhalen/archive-my-tweets.svg)](https://travis-ci.org/amwhalen/archive-my-tweets)
-
 Archive My Tweets
 =================
 
-Archive your tweets to easily browse and search them - all on your own website and in your control. See an example installation on my website: http://amwhalen.com/twitter/.
+Archive your posts from X (formerly Twitter) to easily browse and search them - all on your own website and in your control. See an example installation on my website: http://amwhalen.com/twitter/.
 
 ![archive my tweets](https://raw.github.com/amwhalen/archive-my-tweets/master/img/screenshots/amt.png)
 
 Server Requirements
 -------------------
 
-* PHP 5.3.0+ with cURL and PDO
+* PHP 8.1.0+ with cURL and PDO
 * MySQL
-
 
 Installation
 ------------
@@ -23,14 +20,14 @@ Installation
 4. For users who do not use Apache, see the [wiki for url rewriting](https://github.com/amwhalen/archive-my-tweets/wiki/Advanced-configuration---installation#url-rewriting).
 
 
-Getting Twitter API Tokens
---------------------------
+Getting X (Twitter) API Tokens
+------------------------------
 
-Installation requires that you register your "app" with Twitter. Below is the process:
+Installation requires that you register your "app" with X (Twitter). Below is the process:
 
-1. Visit https://dev.twitter.com/apps/new and sign in with your Twitter credentials.
+1. Visit https://developer.x.com/en/apps and sign in with your X credentials.
 2. Fill in the Name and Description with whatever you'd like.
-3. Fill in the Website and Callback fields with the URL of your twitter archive, e.g. http://amwhalen.com/twitter/.
+3. Fill in the Website and Callback fields with the URL of your archive, e.g. http://amwhalen.com/twitter/.
 4. Save your information and put the keys and tokens into your config.php file.
 
 
@@ -50,23 +47,23 @@ The "secret" is so that only you can run the cron script instead of just any vis
 	0 * * * * /usr/bin/env curl --silent --compressed http://example.com/tweets/cron.php?secret=MY_SECRET
 
 
-Importing Your Official Twitter Archive
----------------------------------------
+Importing Your Official X (Twitter) Archive
+-------------------------------------------
 
-If you started using Archive My Tweets after you already had 3200 tweets, then you're in luck. It's now possible to import your older tweets from your downloaded twitter archive.
+If you started using Archive My Tweets after you already had 3200 posts, then you're in luck. It's now possible to import your older posts from your downloaded X archive.
 
-Twitter now allows most accounts (they're still rolling this out) to download an official archive of all your tweets from the beginning of time. This is great news, and especially amazing is the JavaScript app they've included with it to browse and search your tweets.
+X (formerly Twitter) allows accounts to download an official archive of all your posts from the beginning of time. This is great news, and especially amazing is the JavaScript app they've included with it to browse and search your posts.
 
 To import the archive follow these steps:
 
-1. Visit your Twitter account settings: [https://twitter.com/settings/account](https://twitter.com/settings/account)
-2. Near the bottom of the settings page there should be a button to download your archive. (If you don't see it yet, you may have to wait until it's rolled out to all accounts.)
+1. Visit your X account settings: [https://x.com/settings/account](https://x.com/settings/account)
+2. Near the bottom of the settings page there should be a button to download your archive.
 3. Once you've downloaded and unzipped your archive, copy all of the .js files in the data/js/tweets/ folder over to your server into the 'json' folder.
-4. Manually run your cron.php file, or wait until your next scheduled update. Check for any errors in the output to make sure it's loading in your tweets.
+4. Manually run your cron.php file, or wait until your next scheduled update. Check for any errors in the output to make sure it's loading in your posts.
 
 ![js files](https://raw.github.com/amwhalen/archive-my-tweets/master/img/screenshots/jsfiles.png)
 
-You'll only have to do this one time, as the cron.php running regularly will import all your newest tweets. Tweets that are already in your database will be ignored, so don't worry about duplication.
+You'll only have to do this one time, as the cron.php running regularly will import all your newest posts. Posts that are already in your database will be ignored, so don't worry about duplication.
 
 
 Upgrading
@@ -92,9 +89,9 @@ FAQ
 
 * **Why is my cron.php page blank when I access it?** Your server may need cURL support in PHP. See the [PHP Docs for installing cURL](http://www.php.net/manual/en/curl.setup.php).
 
-* **Why don't my older tweets show up?** Twitter limits API calls to return only the most recent 3200 tweets from any user's timeline. See the Importing Your Official Twitter Archive section for a solution.
+* **Why don't my older posts show up?** X limits API calls to return only the most recent 3200 posts from any user's timeline. See the Importing Your Official X Archive section for a solution.
 
-* **My server doesn't have PHP 5.3.0 or higher, what can I do?** You can download the [old code that supports PHP 5.2 or higher](https://github.com/amwhalen/archive-my-tweets/archive/php52.zip). Beware that this code will not receive any updates.
+* **I need to run PHP 5.x, what can I do?** You can download the [old code that supports PHP 5.2 or higher](https://github.com/amwhalen/archive-my-tweets/archive/php52.zip). Beware that this code will not receive any updates and is not maintained.
 
 License
 -------

@@ -17,6 +17,8 @@ class Tweet {
     public $in_reply_to_status_id = NULL;
     public $in_reply_to_user_id = NULL;
     public $in_reply_to_screen_name = NULL;
+    public $retweeted_status_id = NULL;
+    public $retweeted_status_user_id = NULL;
 
     /**
      * Constructor
@@ -51,14 +53,14 @@ class Tweet {
         // linkify twitter users
         $status_text = preg_replace(
             '/(^|\s)(@(\w+))/',
-            '\1<a href="https://twitter.com/\3">\2</a>',
+            '\1<a href="https://x.com/\3">\2</a>',
             $status_text
         );
 
         // linkify tags
         $status_text = preg_replace(
             '/(^|\s)(#(\S+))/',
-            '\1<a href="https://twitter.com/search?q=%23\3">\2</a>',
+            '\1<a href="https://x.com/search?q=%23\3">\2</a>',
             $status_text
         );
 
@@ -71,16 +73,16 @@ class Tweet {
      */
     public function load_array($t) {
 
-        $this->id = $t['id'];
-        $this->user_id = $t['user']['id'];
-        $this->created_at = date('Y-m-d H:i:s', strtotime($t['created_at']));
-        $this->tweet = $t['text'];
-        $this->source = $t['source'];
-        $this->truncated = ($t['truncated']) ? '1' : '0';
-        $this->favorited = ($t['favorited']) ? '1' : '0';
-        $this->in_reply_to_status_id = $t['in_reply_to_status_id'];
-        $this->in_reply_to_user_id = $t['in_reply_to_user_id'];
-        $this->in_reply_to_screen_name = $t['in_reply_to_screen_name'];
+        $this->id = $t['id'] ?? null;
+        $this->user_id = $t['user']['id'] ?? null;
+        $this->created_at = isset($t['created_at']) ? date('Y-m-d H:i:s', strtotime($t['created_at'])) : null;
+        $this->tweet = $t['text'] ?? '';
+        $this->source = $t['source'] ?? '';
+        $this->truncated = (!empty($t['truncated'])) ? '1' : '0';
+        $this->favorited = (!empty($t['favorited'])) ? '1' : '0';
+        $this->in_reply_to_status_id = $t['in_reply_to_status_id'] ?? null;
+        $this->in_reply_to_user_id = $t['in_reply_to_user_id'] ?? null;
+        $this->in_reply_to_screen_name = $t['in_reply_to_screen_name'] ?? null;
 
     }
 

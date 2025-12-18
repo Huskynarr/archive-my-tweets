@@ -39,7 +39,7 @@ if (count($errors)) {
 ?>
 
 <p class="lead">
-	You're just one step away from your own Twitter archive!
+	You're just one step away from your own X (formerly Twitter) archive!
 	Fill out and submit this form to install Archive My Tweets on your server.
 	You can change these settings any time after installation by modifying your <code>config.php</code> file.
 	Find out more in the <a href="https://github.com/amwhalen/archive-my-tweets" target="_blank">documentation</a>.
@@ -53,7 +53,7 @@ if (count($errors)) {
 	<legend>Account</legend>
 
 		<div class="control-group<?php if (isset($formErrors['twitterUsername'])) { echo ' error'; } ?>">
-			<label class="control-label" for="twitterUsername">Twitter Username</label>
+			<label class="control-label" for="twitterUsername">X Username</label>
 			<div class="controls">
 				<div class="input-prepend">
 					<span class="add-on">@</span>
@@ -73,17 +73,17 @@ if (count($errors)) {
 	</fieldset>
 
 	<fieldset>
-    <legend>Twitter App Credentials</legend>
+    <legend>X (Twitter) App Credentials</legend>
 
 		<div class="control-group">
 			<label class="control-label" for="apiHelp"></label>
 			<div class="controls">
 				<div class="help-block">
-					The consumer and oauth tokens are required to properly retrieve all of your data from the Twitter API.
+					The consumer and oauth tokens are required to properly retrieve all of your data from the X API.
 					<ol>
-						<li>Visit <a href="https://dev.twitter.com/apps/new" target="_blank">https://dev.twitter.com/apps/new</a> and sign in with your Twitter credentials.</li>
+						<li>Visit <a href="https://developer.x.com/en/apps" target="_blank">https://developer.x.com/en/apps</a> and sign in with your X credentials.</li>
 						<li>Fill in the Name and Description with whatever you'd like.</li>
-						<li>Fill in the Website and Callback fields with the URL of your twitter archive, e.g. http://amwhalen.com/twitter/.</li>
+						<li>Fill in the Website and Callback fields with the URL of your archive, e.g. http://amwhalen.com/twitter/.</li>
 						<li>Save your information and put the keys and tokens into this form.</li>
 					</ol>
 				</div>
@@ -104,14 +104,14 @@ if (count($errors)) {
 			</div>
 		</div>
 		<div class="control-group<?php if (isset($formErrors['oauthToken']) || isset($twitterErrors)) { echo ' error'; } ?>">
-			<label class="control-label" for="oauthToken">Twitter OAuth Token</label>
+			<label class="control-label" for="oauthToken">OAuth Token</label>
 			<div class="controls">
 				<input class="span6" type="text" id="oauthToken" name="oauthToken" value="<?php echo htmlentities($form['oauthToken']); ?>">
 				<?php if (isset($formErrors['oauthToken'])) { echo '<div class="help-block">'.$formErrors['oauthToken'].'</div>'; } ?>
 			</div>
 		</div>
 		<div class="control-group<?php if (isset($formErrors['oauthSecret']) || isset($twitterErrors)) { echo ' error'; } ?>">
-			<label class="control-label" for="oauthSecret">Twitter OAuth Secret</label>
+			<label class="control-label" for="oauthSecret">OAuth Secret</label>
 			<div class="controls">
 				<input class="span6" type="text" id="oauthSecret" name="oauthSecret" value="<?php echo htmlentities($form['oauthSecret']); ?>">
 				<?php if (isset($formErrors['oauthSecret'])) { echo '<div class="help-block">'.$formErrors['oauthSecret'].'</div>'; } ?>
@@ -144,7 +144,7 @@ if (count($errors)) {
 				</select>
 				<?php if (isset($formErrors['timezone'])) { echo '<div class="help-block">'.$formErrors['timezone'].'</div>'; } ?>
 				<div class="help-block">
-					Select the closest time zone to you so your tweets will display the proper dates and times.
+					Select the closest time zone to you so your posts will display the proper dates and times.
 				</div>
 			</div>
 		</div>
@@ -155,7 +155,7 @@ if (count($errors)) {
 				<?php if (isset($formErrors['cronKey'])) { echo '<div class="help-block">'.$formErrors['cronKey'].'</div>'; } ?>
 				<div class="help-block">
 					Alpha-numeric only, don't use spaces or strange characters.
-					This is required to load your tweets by calling your cron.php on the web.
+					This is required to load your posts by calling your cron.php on the web.
 					Using a secret key to access your cron.php file will help protect your precious API call limit from being used up.
 					See the <a href="https://github.com/amwhalen/archive-my-tweets#setting-up-a-cron-job" target="_blank">docs for more information</a>.
 				</div>

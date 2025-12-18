@@ -2,11 +2,11 @@
 
 namespace AMWhalen\ArchiveMyTweets;
 
-class ImporterTest extends \PHPUnit_Framework_TestCase {
+class ImporterTest extends \PHPUnit\Framework\TestCase {
 
 	protected $model;
 
-	public function setUp() {
+	public function setUp(): void {
 		
 		require_once dirname(__FILE__) . '/../includes.php';
 

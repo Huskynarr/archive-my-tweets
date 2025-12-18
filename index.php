@@ -1,8 +1,8 @@
 <?php
 
-// namespaces require PHP 5.3, give nice error output before any files are included
-if (version_compare(phpversion(), '5.3.0') < 0) {
-	exit('Archive My Tweets requires PHP 5.3.0 or higher. Your server is running PHP '.phpversion().'.');
+// Require PHP 8.1+ for modern compatibility
+if (version_compare(phpversion(), '8.1.0') < 0) {
+	exit('Archive My Tweets requires PHP 8.1.0 or higher. Your server is running PHP '.phpversion().'.');
 }
 
 // run

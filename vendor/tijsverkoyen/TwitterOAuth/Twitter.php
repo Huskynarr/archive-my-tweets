@@ -277,7 +277,7 @@ class Twitter
         $options[CURLOPT_URL] = self::SECURE_API_URL . '/oauth/' . $method;
         $options[CURLOPT_PORT] = self::SECURE_API_PORT;
         $options[CURLOPT_USERAGENT] = $this->getUserAgent();
-        if (ini_get('open_basedir') == '' && ini_get('safe_mode' == 'Off')) {
+        if (ini_get('open_basedir') == '') {
             $options[CURLOPT_FOLLOWLOCATION] = true;
         }
         $options[CURLOPT_RETURNTRANSFER] = true;
@@ -430,7 +430,7 @@ class Twitter
         $options[CURLOPT_URL] = self::API_URL . '/' . $url;
         $options[CURLOPT_PORT] = self::API_PORT;
         $options[CURLOPT_USERAGENT] = $this->getUserAgent();
-        if (ini_get('open_basedir') == '' && ini_get('safe_mode' == 'Off')) {
+        if (ini_get('open_basedir') == '') {
             $options[CURLOPT_FOLLOWLOCATION] = true;
         }
         $options[CURLOPT_RETURNTRANSFER] = true;
@@ -1382,13 +1382,13 @@ class Twitter
     /**
      * Sends a new direct message to the specified user from the authenticating user. Requires both the user and text parameters and must be a POST. Returns the sent message in the requested format if successful.
      *
+     * @param  string           $text       The text of your direct message. Be sure to URL encode as necessary, and keep the message under 140 characters.
      * @param  string[optional] $userId     The ID of the user who should receive the direct message. Helpful for disambiguating when a valid user ID is also a valid screen name.
      * @param  string[optional] $screenName The screen name of the user who should receive the direct message. Helpful for disambiguating when a valid screen name is also a user ID.
-     * @param  string           $text       The text of your direct message. Be sure to URL encode as necessary, and keep the message under 140 characters.
      * @return array
      */
     public function directMessagesNew(
-        $userId = null, $screenName = null, $text
+        $text, $userId = null, $screenName = null
     )
     {
         // validate

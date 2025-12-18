@@ -12,3 +12,15 @@ build/pdepend
 build/phpdox
 build/build
 cache.properties
+
+# Composer files (but keep tijsverkoyen library)
+composer.lock
+vendor/autoload.php
+vendor/bin
+vendor/composer
+vendor/myclabs
+vendor/nikic
+vendor/phar-io
+vendor/phpunit
+vendor/sebastian
+vendor/theseer
