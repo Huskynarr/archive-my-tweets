@@ -3,22 +3,22 @@
 namespace AMWhalen\ArchiveMyTweets;
 
 /**
- * Twitter API v2 Client
+ * X API v2 Client (formerly Twitter API v2)
  * 
- * Implements Twitter/X API v2 for the free tier as documented at:
+ * Implements X API v2 for the free tier as documented at:
  * https://docs.x.com/x-api/getting-started/getting-access
  * 
  * The free tier supports:
- * - User tweets lookup (up to 1,500 tweets per month)
+ * - User posts (tweets) lookup (up to 1,500 posts per month)
  * - OAuth 2.0 Bearer Token authentication
  */
 class TwitterV2
 {
     // API v2 URL
-    const API_URL = 'https://api.twitter.com/2';
+    const API_URL = 'https://api.x.com/2';
     
     // OAuth 2.0 token URL
-    const OAUTH2_TOKEN_URL = 'https://api.twitter.com/oauth2/token';
+    const OAUTH2_TOKEN_URL = 'https://api.x.com/oauth2/token';
     
     // Current version
     const VERSION = '1.0.0';
@@ -229,6 +229,11 @@ class TwitterV2
             throw new \Exception('Invalid JSON response from API');
         }
         
+        if ($httpCode >= 400) {
+            $error = $json['detail'] ?? $json['title'] ?? ('HTTP error ' . $httpCode);
+            throw new \Exception($error, $httpCode);
+        }
+
         // Check for API errors
         if (isset($json['errors']) && is_array($json['errors']) && !empty($json['errors'])) {
             $errorMsg = $json['errors'][0]['message'] ?? 'Unknown API error';
@@ -301,20 +306,20 @@ class TwitterV2
     }
     
     /**
-     * Get tweets for a user (API v2 equivalent of statusesUserTimeline)
+     * Get posts for a user (API v2 equivalent of statusesUserTimeline)
      * 
-     * Note: The free tier has a monthly limit of 1,500 tweets.
+     * Note: The free tier has a monthly limit of 1,500 posts (tweets).
      *
      * @param string|null $userId The ID of the user
      * @param string|null $screenName The screen name of the user (will be converted to ID)
      * @param string|null $sinceId Returns results with an ID greater than the specified ID
-     * @param int|null $count Number of tweets to retrieve (max 100 for v2)
+     * @param int|null $count Number of posts to retrieve (max 100 for v2)
      * @param string|null $maxId Returns results with an ID less than the specified ID (pagination_token in v2)
      * @param bool|null $trimUser Not used in v2, kept for compatibility
      * @param bool|null $excludeReplies Exclude reply tweets
      * @param bool|null $contributorDetails Not used in v2, kept for compatibility
      * @param bool|null $includeRts Include retweets
-     * @return array Array of tweet data in v1.1-compatible format
+     * @return array Array of post data in v1.1-compatible format
      * @throws \Exception
      */
     public function statusesUserTimeline(
@@ -327,6 +332,38 @@ class TwitterV2
         ?bool $excludeReplies = null,
         ?bool $contributorDetails = null,
         ?bool $includeRts = null
+    ): array {
+        $page = $this->statusesUserTimelinePage(
+            $userId,
+            $screenName,
+            $sinceId,
+            $count,
+            $maxId,
+            $trimUser,
+            $excludeReplies,
+            $contributorDetails,
+            $includeRts,
+            null
+        );
+        return $page['tweets'];
+    }
+
+    /**
+     * Get a single page of posts for a user, including pagination token.
+     *
+     * @return array{tweets: array, next_token: string|null}
+     */
+    public function statusesUserTimelinePage(
+        ?string $userId = null,
+        ?string $screenName = null,
+        ?string $sinceId = null,
+        ?int $count = null,
+        ?string $maxId = null,
+        ?bool $trimUser = null,
+        ?bool $excludeReplies = null,
+        ?bool $contributorDetails = null,
+        ?bool $includeRts = null,
+        ?string $paginationToken = null
     ): array {
         // Validate that we have either userId or screenName
         if (empty($userId) && empty($screenName)) {
@@ -357,8 +394,10 @@ class TwitterV2
             $parameters['since_id'] = $sinceId;
         }
         
-        // Max ID for older tweets (use until_id in v2)
-        if ($maxId !== null) {
+        // Pagination or older posts
+        if ($paginationToken !== null) {
+            $parameters['pagination_token'] = $paginationToken;
+        } elseif ($maxId !== null) {
             $parameters['until_id'] = $maxId;
         }
         
@@ -381,7 +420,10 @@ class TwitterV2
         
         // Check if we have data
         if (!isset($response['data']) || empty($response['data'])) {
-            return [];
+            return [
+                'tweets' => [],
+                'next_token' => null
+            ];
         }
         
         // Build user lookup from includes
@@ -393,11 +435,17 @@ class TwitterV2
         }
         
         // Convert v2 response to v1.1-compatible format
-        return $this->convertToV1Format($response['data'], $users);
+        $tweets = $this->convertToV1Format($response['data'], $users);
+        $nextToken = $response['meta']['next_token'] ?? null;
+
+        return [
+            'tweets' => $tweets,
+            'next_token' => $nextToken
+        ];
     }
     
     /**
-     * Convert Twitter API v2 response to v1.1-compatible format
+     * Convert X API v2 response to v1.1-compatible format (formerly Twitter API v2)
      *
      * @param array $tweets Array of tweets from v2 API
      * @param array $users Array of user data keyed by user ID
@@ -439,7 +487,7 @@ class TwitterV2
                 'id' => $tweet['id'],
                 'text' => $tweet['text'],
                 'created_at' => $tweet['created_at'] ?? null,
-                'source' => $tweet['source'] ?? 'Twitter',
+                'source' => $tweet['source'] ?? 'X',
                 'truncated' => false,
                 'favorited' => false,
                 'in_reply_to_status_id' => $inReplyToStatusId,
@@ -503,6 +551,6 @@ class TwitterV2
      */
     public function getUserAgent(): string
     {
-        return 'PHP TwitterV2/' . self::VERSION . ' ' . ($this->userAgent ?? '');
+        return 'PHP XAPIv2/' . self::VERSION . ' ' . ($this->userAgent ?? '');
     }
 }

@@ -95,7 +95,7 @@ class Installer {
                 }
             }
 
-            // test twitter connection
+            // test X connection (formerly Twitter)
             if (!$installProblem) {
 
                 $this->twitter = new \TijsVerkoyen\Twitter\Twitter($this->data['form']['consumerKey'], $this->data['form']['consumerSecret']);
@@ -106,7 +106,7 @@ class Installer {
                     $tweetResults = $this->twitter->statusesUserTimeline(null, $this->data['form']['twitterUsername']);
                 } catch (\Exception $e) {
                     $installProblem = true;
-                    $this->data['twitterErrors'] = 'There was a problem connecting to twitter: ' . $e->getMessage();
+                    $this->data['twitterErrors'] = 'There was a problem connecting to X (formerly Twitter): ' . $e->getMessage();
                 }
             }
 
@@ -315,7 +315,7 @@ class Installer {
 
         // Optional: json_decode
         if (!function_exists('json_decode')) {
-            $problems['warnings'][] = 'Your version of PHP is missing the <code>json_decode()</code> function. This is included and enabled by default for PHP versions 5.2.0 and higher. This is only required if you want to import tweets from an official twitter archive download, otherwise Archive My Tweets can run without it.';
+            $problems['warnings'][] = 'Your version of PHP is missing the <code>json_decode()</code> function. This is included and enabled by default for PHP versions 5.2.0 and higher. This is only required if you want to import posts (tweets) from an official X archive download (formerly Twitter), otherwise Archive my Posts (Tweets) can run without it.';
         }
 
         // Optional: 64-bit integers

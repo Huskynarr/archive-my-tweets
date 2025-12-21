@@ -5,7 +5,7 @@ if (count($errors)) {
 	?>
 	<p class="lead">
 		Sorry!
-		Archive My Tweets can't be installed because your server does not meet the minimum requirements.
+		Archive my Posts (Tweets) can't be installed because your server does not meet the minimum requirements.
 		There may be more information about these errors in the <a href="https://github.com/amwhalen/archive-my-tweets" target="_blank">documentation</a>.
 	</p>
 	<?php
@@ -39,8 +39,8 @@ if (count($errors)) {
 ?>
 
 <p class="lead">
-	You're just one step away from your own X (formerly Twitter) archive!
-	Fill out and submit this form to install Archive My Tweets on your server.
+	You're just one step away from your own X archive (formerly Twitter)!
+	Fill out and submit this form to install Archive my Posts (Tweets) on your server.
 	You can change these settings any time after installation by modifying your <code>config.php</code> file.
 	Find out more in the <a href="https://github.com/amwhalen/archive-my-tweets" target="_blank">documentation</a>.
 </p>
@@ -73,17 +73,17 @@ if (count($errors)) {
 	</fieldset>
 
 	<fieldset>
-    <legend>X (Twitter) App Credentials</legend>
+    <legend>X App Credentials (formerly Twitter)</legend>
 
 		<div class="control-group">
 			<label class="control-label" for="apiHelp"></label>
 			<div class="controls">
 				<div class="help-block">
-					The consumer and oauth tokens are required to properly retrieve all of your data from the X API.
+					The consumer and OAuth tokens are required to properly retrieve all of your data from the X API.
 					<ol>
 						<li>Visit <a href="https://developer.x.com/en/apps" target="_blank">https://developer.x.com/en/apps</a> and sign in with your X credentials.</li>
 						<li>Fill in the Name and Description with whatever you'd like.</li>
-						<li>Fill in the Website and Callback fields with the URL of your archive, e.g. http://amwhalen.com/twitter/.</li>
+						<li>Fill in the Website and Callback fields with the URL of your archive, e.g. http://amwhalen.com/x/.</li>
 						<li>Save your information and put the keys and tokens into this form.</li>
 					</ol>
 				</div>
@@ -130,7 +130,7 @@ if (count($errors)) {
 				<?php if (isset($formErrors['baseUrl'])) { echo '<div class="help-block">'.$formErrors['baseUrl'].'</div>'; } ?>
 				<div class="help-block">
 					The full URL to your installation, with a trailing slash.
-					Example: <code>http://amwhalen.com/twitter/</code>
+					Example: <code>http://amwhalen.com/x/</code>
 				</div>
 			</div>
 		</div>
@@ -204,7 +204,7 @@ if (count($errors)) {
 				<input class="span4" type="text" id="databasePrefix" name="databasePrefix" value="<?php echo htmlentities($form['databasePrefix']); ?>">
 				<?php if (isset($formErrors['databasePrefix'])) { echo '<div class="help-block">'.$formErrors['databasePrefix'].'</div>'; } ?>
 				<div class="help-block">
-					Set a table prefix to prevent Archive My Tweet's database table names from clashing with other tables in your database.
+					Set a table prefix to prevent Archive my Posts (Tweets) database table names from clashing with other tables in your database.
 					The suggested prefix is <code>amt_</code>.
 				</div>
 			</div>

@@ -41,7 +41,7 @@ class Tweet {
      */
     public function get_linked_tweet() {
 
-        // props to: http://davidwalsh.name/linkify-twitter-feed
+        // props to: http://davidwalsh.name/linkify-twitter-feed (historical Twitter context)
 
         // linkify URLs
         $status_text = preg_replace(
@@ -50,7 +50,7 @@ class Tweet {
             $this->tweet
         );
 
-        // linkify twitter users
+        // linkify X users (formerly Twitter)
         $status_text = preg_replace(
             '/(^|\s)(@(\w+))/',
             '\1<a href="https://x.com/\3">\2</a>',

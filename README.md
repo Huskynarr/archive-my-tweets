@@ -1,7 +1,7 @@
 Archive My Tweets
 =================
 
-Archive your posts from X (formerly Twitter) to easily browse and search them - all on your own website and in your control. See an example installation on my website: http://amwhalen.com/twitter/.
+Archive your posts from X (formerly Twitter) to easily browse and search them - all on your own website and in your control. See an example installation on my website: http://amwhalen.com/x/.
 
 ![archive my tweets](https://raw.github.com/amwhalen/archive-my-tweets/master/img/screenshots/amt.png)
 
@@ -14,16 +14,16 @@ Server Requirements
 Installation
 ------------
 
-1. [Download the archive-my-tweets source code](https://github.com/amwhalen/archive-my-tweets/archive/master.zip), unzip it, and upload it into a directory on your LAMP web server (e.g. /tweets/).
-2. Visit the installation location in your web browser, e.g. http://www.example.com/tweets/.
+1. [Download the archive-my-tweets source code](https://github.com/amwhalen/archive-my-tweets/archive/master.zip), unzip it, and upload it into a directory on your LAMP web server (e.g. /x/).
+2. Visit the installation location in your web browser, e.g. http://www.example.com/x/.
 3. Fill out the form with your information and save. That's it!
 4. For users who do not use Apache, see the [wiki for url rewriting](https://github.com/amwhalen/archive-my-tweets/wiki/Advanced-configuration---installation#url-rewriting).
 
 
-Getting X (Twitter) API Tokens
+Getting X API Tokens (formerly Twitter)
 ------------------------------
 
-Installation requires that you register your "app" with X (Twitter). The application now uses API v2 (free tier) which has a monthly limit of 1,500 tweets. Below is the process:
+Installation requires that you register your "app" with X (formerly Twitter). The application now uses X API v2 (free tier) which has a monthly limit of 1,500 posts (tweets). Below is the process:
 
 1. Visit https://developer.x.com/en/portal/dashboard and sign in with your X credentials.
 2. Create a new Project and App if you don't have one already.
@@ -33,26 +33,41 @@ Installation requires that you register your "app" with X (Twitter). The applica
    - Bearer Token (recommended for API v2)
 4. Put these credentials into your config.php file.
 
-Note: The free tier of X API v2 provides read-only access with a limit of 1,500 tweets per month. For archiving older tweets, consider importing your official X archive (see below).
+Note: The free tier of X API v2 provides read-only access with a limit of 1,500 posts (tweets) per month. For archiving older posts (tweets), consider importing your official X archive (formerly Twitter) (see below).
+
+X API Free vs Paid Access
+-------------------------
+
+This project requires **read access** to user timelines. Under the current X Developer plans, that means you must be on a **paid plan**. The Free plan is **write-only** for most use cases.
+
+What you can do on **Free** (Write):
+- Create posts: up to 500 posts per month (per user)
+- App-level cap: the limit applies to the entire app created in the Developer Portal
+
+What you **cannot** do on **Free** (Read):
+- No read access to timelines like `GET /2/users/:id/tweets`
+- Access is limited to write-only endpoints and a few v1.1 endpoints (e.g. media upload)
+
+If you want this archive to fetch posts automatically, upgrade to a paid plan or import your official X archive manually.
 
 
 Setting Up a Cron Job
 ---------------------
 
-If you want to automatically update your tweets you'll need to set up a cron job. You can find more information on Cron elsewhere, but here's an example that will run your cron.php every hour of the day:
+If you want to automatically update your posts (tweets) you'll need to set up a cron job. You can find more information on Cron elsewhere, but here's an example that will run your cron.php every hour of the day:
 
 	0 * * * * /usr/bin/env php /path/to/the/cron.php
 
 If you want to set up the cron job to run remotely, use this instead:
 
-	0 * * * * /usr/bin/env wget -O - -q -t 1 http://example.com/tweets/cron.php?secret=MY_SECRET
+0 * * * * /usr/bin/env wget -O - -q -t 1 http://example.com/x/cron.php?secret=MY_SECRET
 
-The "secret" is so that only you can run the cron script instead of just any visitor. This will protect your Twitter API limit (350 requests per hour), which is tied to your username. If you don't have wget installed on your server, you could try to use cURL instead:
+The "secret" is so that only you can run the cron script instead of just any visitor. This will protect your X API limit (350 requests per hour), which is tied to your username. If you don't have wget installed on your server, you could try to use cURL instead:
 
-	0 * * * * /usr/bin/env curl --silent --compressed http://example.com/tweets/cron.php?secret=MY_SECRET
+0 * * * * /usr/bin/env curl --silent --compressed http://example.com/x/cron.php?secret=MY_SECRET
 
 
-Importing Your Official X (Twitter) Archive
+Importing Your Official X Archive (formerly Twitter)
 -------------------------------------------
 
 If you started using Archive My Tweets after you already had 3200 posts, then you're in luck. It's now possible to import your older posts from your downloaded X archive.

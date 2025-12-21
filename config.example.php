@@ -8,7 +8,7 @@ define('TWITTER_USERNAME', ''); // e.g. awhalen (your X username)
 define('TWITTER_NAME',     ''); // e.g. Andrew M. Whalen (your display name)
 
 // The URL for your installation of archive-my-tweets
-define('BASE_URL', ''); // e.g. http://amwhalen.com/twitter/ (start with http:// and have a slash at the end)
+define('BASE_URL', ''); // e.g. http://amwhalen.com/x/ (start with http:// and have a slash at the end)
 
 // X API v2 credentials (free tier)
 // Register at https://developer.x.com/en/apps

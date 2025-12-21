@@ -39,7 +39,7 @@
 				
 					<?php } else { ?>
 					
-						<p class="no-tweets lead">No tweets found!</p>
+						<p class="no-tweets lead">No posts (tweets) found!</p>
 					
 					<?php } ?>
 				</div><!-- /tweets -->
@@ -50,7 +50,7 @@
 						
 					<div id="archive" class="widget rounded">
 						<ul class="links">
-							<li class="all-tweets <?php echo (isset($all_tweets) && $all_tweets) ? 'here' : ''; ?>"><a href="<?php echo $config['system']['baseUrl']; ?>"><span class="month">All Tweets</span><span class="total"><?php echo $totalTweets; ?></span><span class="bar"></span></a></li>
+							<li class="all-tweets <?php echo (isset($all_tweets) && $all_tweets) ? 'here' : ''; ?>"><a href="<?php echo $config['system']['baseUrl']; ?>"><span class="month">All Posts (Tweets)</span><span class="total"><?php echo $totalTweets; ?></span><span class="bar"></span></a></li>
 							<li class="<?php echo (isset($favorite_tweets) && $favorite_tweets) ? 'here' : ''; ?>"><a href="<?php echo $config['system']['baseUrl']; ?>favorites"><span class="month">Favorites</span><span class="total"><?php echo $totalFavoriteTweets; ?></span><span class="bar"></span></a></li>
 							<?php
 							

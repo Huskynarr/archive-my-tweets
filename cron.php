@@ -13,7 +13,7 @@ if ($isCLI || $isWeb) {
 
 	$amt = new \AMWhalen\ArchiveMyTweets\App($config);
 
-	// Import JSON from an official twitter archive
+	// Import JSON from an official X archive (formerly Twitter)
 	// monthly .js files should be in a folder called 'json'
 	$importOutput = $amt->importJSON(dirname(__FILE__) . '/json');
 	if ($isWeb) {
@@ -22,7 +22,7 @@ if ($isCLI || $isWeb) {
 		echo $importOutput;
 	}
 
-	// API tweets
+	// API posts (tweets)
 	$archiveOutput = $amt->archive();
 	if ($isWeb) {
 		echo '<pre>' . $archiveOutput . '</pre>';

@@ -7,7 +7,7 @@
 
 		<div class="hero-unit">
 			<h1><?php echo $totalTweets; ?></h1>
-			<p class="lead">total tweets</p>
+			<p class="lead">total posts (tweets)</p>
 		</div>
 
 	</div><!-- /stats -->

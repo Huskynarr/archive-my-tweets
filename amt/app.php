@@ -14,7 +14,7 @@ class App {
     protected $router;
 
     // current version
-    const VERSION = '0.5';
+    const VERSION = '0.5.1';
 
     /**
      * Constructor
@@ -95,13 +95,13 @@ class App {
     }
 
     /**
-     * Grabs all the latest tweets and puts them into the database.
+     * Grabs all the latest posts (tweets) and puts them into the database.
      *
      * @return string Returns a string with informational output.
      */
     public function archive() {
 
-        // Create Twitter API v2 instance (for free tier)
+        // Create X API v2 instance (for free tier)
         $bearerToken = !empty($this->config['auth']['bearerToken']) 
             ? $this->config['auth']['bearerToken'] 
             : null;
@@ -118,9 +118,9 @@ class App {
     }
 
     /**
-     * Imports tweets from the JSON files in a downloaded Twitter Archive
+     * Imports posts from the JSON files in a downloaded X Archive (formerly Twitter)
      *
-     * @param string $directory The directory to look for Twitter .js files.
+     * @param string $directory The directory to look for X .js files (formerly Twitter).
      * @return string Returns a string with informational output.
      */
     public function importJSON($directory) {

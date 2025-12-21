@@ -1,6 +1,6 @@
 {
     "name": "amwhalen/archive-my-tweets",
-    "description": "Archive and display your tweets from Twitter/X",
+    "description": "Archive and display your posts (tweets) from X (formerly Twitter)",
     "type": "project",
     "license": "MIT",
     "authors": [

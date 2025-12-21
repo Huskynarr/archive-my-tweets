@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>@<?php echo $config['twitter']['username']; ?> - <?php echo $config['twitter']['name']; ?> - Tweets</title>
+	<title>@<?php echo $config['twitter']['username']; ?> - <?php echo $config['twitter']['name']; ?> - Posts (Tweets)</title>
 	<link href="<?php echo $config['system']['baseUrl']; ?>css/archive.css" rel="stylesheet">
 	<link href="<?php echo $config['system']['baseUrl']; ?>assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 	<!--[if lt IE 9]>
@@ -22,7 +22,7 @@
 				<ul id="search-nav" class="nav pull-right">
 					<!--<li><a href="<?php echo $config['system']['baseUrl']; ?>stats">Stats</a></li>-->
 					<form action="<?php echo $config['system']['baseUrl']; ?>" class="navbar-search pull-right" method="get">
-						<input type="text" size="20" name="q" value="<?php echo (isset($search) && $search) ? htmlentities($searchTerm) : ''; ?>" class="span3 search-query" placeholder="Search my tweets" />
+						<input type="text" size="20" name="q" value="<?php echo (isset($search) && $search) ? htmlentities($searchTerm) : ''; ?>" class="span3 search-query" placeholder="Search my posts (tweets)" />
 					</form>
 				</ul>
 			</div>
@@ -39,7 +39,7 @@
 
 	<div class="footer" id="footer">
 		<div class="container">
-			<p><a href="http://amwhalen.com/projects/archive-my-tweets/">Archive My Tweets</a> by <a href="http://amwhalen.com">Andrew M. Whalen</a>.</p>
+			<p>Archive my Posts (Tweets) with <a href="https://x.com">X</a> - Made by <a href="https://x.com/Huskynarr">Huskynarr</a> with Origin Code be <a href="http://amwhalen.com/projects/archive-my-tweets/">Andrew M. Whalen</a>.</p>
 		</div><!-- /.container -->
 	</div><!-- /.footer -->
 

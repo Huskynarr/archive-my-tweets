@@ -3,7 +3,7 @@
 namespace AMWhalen\ArchiveMyTweets;
 
 /**
- * Imports tweets from an official Twitter archive download
+ * Imports posts from an official X archive download (formerly Twitter)
  */
 class Importer {
 
@@ -12,25 +12,25 @@ class Importer {
     }
 
     /**
-     * Imports tweets from the JSON files in a downloaded Twitter Archive
+     * Imports posts from the JSON files in a downloaded X Archive (formerly Twitter)
      *
-     * @param string $directory The directory to look for Twitter .js files.
+     * @param string $directory The directory to look for X .js files (formerly Twitter).
      * @param Model $model The persistence model.
      * @return string Returns a string with informational output.
      * @author awhalen
      */
     public function importJSON($directory, $model) {
 
-        $str = 'Importing from Twitter Archive JS Files...' . "\n";
+        $str = 'Importing from X Archive JS Files (formerly Twitter)...' . "\n";
 
         if (!is_dir($directory)) {
-            return $str . 'Could not import from official Twitter archive. Not a valid directory: ' . $directory . "\n";
+            return $str . 'Could not import from official X archive (formerly Twitter). Not a valid directory: ' . $directory . "\n";
         }
 
         $jsFiles = glob($directory . "/*.js");
         if (count($jsFiles)) {
 
-            // find all JS files and grab the tweets from each one
+            // find all JS files and grab the posts (tweets) from each one
             foreach ($jsFiles as $filename) {
                 $tweets = $this->getTweetsInJsonFile($filename);
                 if ($tweets != false) {
@@ -44,22 +44,22 @@ class Importer {
                     if ($result === false) {
                         $str .= 'ERROR INSERTING INTO DATABASE: ' . $model->getLastErrorMessage() . "\n";
                     } else if ($result == 0) {
-                        $str .= 'No new tweets found.' . "\n";
+                        $str .= 'No new posts (tweets) found.' . "\n";
                     } else {
                         $numAdded += $result;
-                        $str .= 'Added new tweets: ' . $result . "\n";
+                        $str .= 'Added new posts (tweets): ' . $result . "\n";
                     }
 
                 } else {
-                    $str .= $filename . ': No tweets found' . "\n";
+                    $str .= $filename . ': No posts (tweets) found' . "\n";
                 }
             }
 
-            $str .= 'JS import done. Added tweets: ' . $numAdded . "\n";
+            $str .= 'JS import done. Added posts (tweets): ' . $numAdded . "\n";
 
         } else {
 
-            $str .= 'No Twitter Archive JS files found.' . "\n";
+            $str .= 'No X Archive JS files found (formerly Twitter).' . "\n";
 
         }
 
@@ -68,7 +68,7 @@ class Importer {
     }
 
     /**
-     * Returns an array of Tweet objects that are populated from a Twitter JSON file.
+     * Returns an array of Tweet objects that are populated from an X JSON file (formerly Twitter).
      *
      * @return array|false
      */
@@ -85,7 +85,7 @@ class Importer {
             return false;
         }
 
-        // the twitter format includes extra JS code, but we just want the JSON array
+        // the X format (formerly Twitter) includes extra JS code, but we just want the JSON array
         $pattern = '/\[.*\]/s';
         $matchError = preg_match($pattern, $jsonString, $matches);
         // $matchError can be zero or false if not found or there was a failure

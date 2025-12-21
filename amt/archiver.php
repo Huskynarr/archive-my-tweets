@@ -5,7 +5,7 @@ namespace AMWhalen\ArchiveMyTweets;
 require_once 'tweet.php';
 
 /**
- * Interacts with the Twitter API v2 to archive tweets for an account.
+ * Interacts with the X API v2 (formerly Twitter API v2) to archive posts for an account.
  */
 class Archiver {
 
@@ -16,8 +16,8 @@ class Archiver {
     /**
      * Constructor
      * 
-     * @param string $username Twitter username
-     * @param TwitterV2|\TijsVerkoyen\Twitter\Twitter $twitter Twitter API client
+     * @param string $username X username
+     * @param TwitterV2|\TijsVerkoyen\Twitter\Twitter $twitter X API client (formerly Twitter API)
      * @param Model $model Database model
      */
     public function __construct($username, $twitter, Model $model) {
@@ -29,15 +29,15 @@ class Archiver {
     }
 
     /**
-     * Grabs all the latest tweets and puts them into the database.
-     * Note: API v2 free tier is limited to 1,500 tweets per month.
+     * Grabs all the latest posts (tweets) and puts them into the database.
+     * Note: API v2 free tier is limited to 1,500 posts (tweets) per month.
      *
      * @return string Returns a string with informational output.
      */
     public function archive() {
 
         // API v2 params
-        $maxId              = null;
+        $paginationToken    = null;
         $sinceId            = null;
         $userId             = null; // not needed if using screen name
         $screenName         = $this->username;
@@ -46,6 +46,11 @@ class Archiver {
         $excludeReplies     = false;
         $contributorDetails = true;
         $includeRts         = true;
+
+        $latest = $this->model->getLatestTweet();
+        if ($latest && isset($latest['id'])) {
+            $sinceId = (string)$latest['id'];
+        }
 
         // loop variables
         $str            = '';
@@ -57,29 +62,42 @@ class Archiver {
         $exceptionCount = 0;
         $numTweetsAdded = 0;
         $numExceptions  = 0;
-        $maxExceptions  = 25; // don't get stuck in the loop if twitter is down
+        $maxExceptions  = 25; // don't get stuck in the loop if X is down
 
         while ($gotResults) {
 
-            $str .= "max id: " . (($maxId === null) ? 'null' : $maxId) . "\n";
+            $str .= "page token: " . (($paginationToken === null) ? 'null' : $paginationToken) . "\n";
 
             try {
 
-                $tweetResults = $this->twitter->statusesUserTimeline($userId, $screenName, $sinceId, $count, $maxId, $trimUser, $excludeReplies, $contributorDetails, $includeRts);
+                $page = $this->twitter->statusesUserTimelinePage(
+                    $userId,
+                    $screenName,
+                    $sinceId,
+                    $count,
+                    null,
+                    $trimUser,
+                    $excludeReplies,
+                    $contributorDetails,
+                    $includeRts,
+                    $paginationToken
+                );
+                $tweetResults = $page['tweets'];
+                $paginationToken = $page['next_token'];
                 $apiCalls++;
 
                 $numResults = count($tweetResults);
                 $tweetsFound += $numResults;
 
                 if ($numResults == 0) {
-                    $str .= 'NO tweets on page ' . $page . ", exiting.\n";
+                    $str .= 'NO posts (tweets) on page ' . $page . ", exiting.\n";
                     $gotResults = false;
                 } else {
 
                     $newestTweet = $tweetResults[0];
                     $oldestTweet = end($tweetResults);
 
-                    $str .= $numResults . ' tweets on page ' . $page . " (oldest: ".$oldestTweet['id'].", newest: ".$newestTweet['id'].")\n";
+                    $str .= $numResults . ' posts (tweets) on page ' . $page . " (oldest: ".$oldestTweet['id'].", newest: ".$newestTweet['id'].")\n";
 
                     $page++;
 
@@ -95,17 +113,18 @@ class Archiver {
                     $result = $this->model->addTweets($tweets);
 
                     if ($result === false) {
-                        $str .= 'ERROR INSERTING TWEETS INTO DATABASE: ' . $this->model->getLastErrorMessage() . "\n";
+                        $str .= 'ERROR INSERTING POSTS (TWEETS) INTO DATABASE: ' . $this->model->getLastErrorMessage() . "\n";
                     } else if ( $result == 0 ) {
-                        $str .= 'Zero tweets added.' . "\n";
+                        $str .= 'Zero posts (tweets) added.' . "\n";
                     } else {
-                        $str .= $result . ' tweets added.' . "\n";
+                        $str .= $result . ' posts (tweets) added.' . "\n";
                         $numAdded += $result;
                     }
 
-                    // set max ID to the ID of the oldest tweet we've received, minus 1
-                    // be mindful of 32 bit platforms
-                    $maxId = $this->decrement64BitInteger($oldestTweet['id']);
+                    // If there's no next token, we're at the end of the timeline.
+                    if (empty($paginationToken)) {
+                        $gotResults = false;
+                    }
 
                 }
 
@@ -118,7 +137,7 @@ class Archiver {
                         $gotResults = false;
                     }
                 } else {
-                    $str .= 'Rate limit headers missing from response. Twitter may be having problems. Try again later.' . "\n";
+                    $str .= 'Rate limit headers missing from response. X may be having problems. Try again later.' . "\n";
                     $gotResults = false;
                 }
 
@@ -126,11 +145,17 @@ class Archiver {
 
                 $str .= 'Exception: ' . $e->getMessage() . "\n";
 
+                if ($e->getCode() === 429) {
+                    $str .= 'API limit reached. Try again later.' . "\n";
+                    $gotResults = false;
+                    continue;
+                }
+
                 $numExceptions++;
 
-                // break out to avoid infinite looping while twitter is down
+                // break out to avoid infinite looping while X is down
                 if ($numExceptions >= $maxExceptions) {
-                    $str .= 'Too many connection errors. Twitter may be down. Try again later.' . "\n";
+                    $str .= 'Too many connection errors. X may be down. Try again later.' . "\n";
                     $gotResults = false;
                 }
 
@@ -138,7 +163,7 @@ class Archiver {
 
         }
 
-        $str .= $apiCalls . ' API calls, ' . $tweetsFound . ' tweets found, '.$numAdded.' tweets saved' . "\n";
+        $str .= $apiCalls . ' API calls, ' . $tweetsFound . ' posts (tweets) found, '.$numAdded.' posts (tweets) saved' . "\n";
 
         return $str;
 

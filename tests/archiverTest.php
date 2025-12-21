@@ -73,7 +73,7 @@ class ArchiverTest extends \PHPUnit\Framework\TestCase {
 		$archiver = new Archiver($this->username, $twitter, $model);
 		$output = $archiver->archive();
 		
-		$this->assertTrue($this->didFindString($output, 'ERROR INSERTING TWEETS INTO DATABASE'));
+		$this->assertTrue($this->didFindString($output, 'ERROR INSERTING POSTS (TWEETS) INTO DATABASE'));
 
 	}
 
@@ -85,7 +85,7 @@ class ArchiverTest extends \PHPUnit\Framework\TestCase {
 		$archiver = new Archiver($this->username, $twitter, $model);
 		$output = $archiver->archive();
 
-		$this->assertTrue($this->didFindString($output, 'NO tweets on page 1'));
+		$this->assertTrue($this->didFindString($output, 'NO posts (tweets) on page 1'));
 
 	}
 
@@ -96,8 +96,8 @@ class ArchiverTest extends \PHPUnit\Framework\TestCase {
 		// Throw exceptions forever
 		$twitter = $this->getMockTwitter();
 		$twitter->expects($this->any())
-			->method('statusesUserTimeline')
-			->will($this->throwException(new \Exception('Fake Twitter API Exception!')));
+			->method('statusesUserTimelinePage')
+			->will($this->throwException(new \Exception('Fake X API Exception!')));
 
 		$archiver = new Archiver($this->username, $twitter, $model);
 		$output = $archiver->archive();
@@ -126,7 +126,7 @@ class ArchiverTest extends \PHPUnit\Framework\TestCase {
 		$archiver = new Archiver($this->username, $twitter, $model);
 		$output = $archiver->archive();
 
-		$this->assertTrue($this->didFindString($output, 'Zero tweets added.'));
+		$this->assertTrue($this->didFindString($output, 'Zero posts (tweets) added.'));
 
 	}
 
@@ -138,7 +138,7 @@ class ArchiverTest extends \PHPUnit\Framework\TestCase {
 		$archiver = new Archiver($this->username, $twitter, $model);
 		$output = $archiver->archive();
 
-		$this->assertTrue($this->didFindString($output, '200 tweets on page 1'));
+		$this->assertTrue($this->didFindString($output, '200 posts (tweets) on page 1'));
 
 	}
 
@@ -192,8 +192,11 @@ class ArchiverTest extends \PHPUnit\Framework\TestCase {
 
 		// Use willReturnOnConsecutiveCalls for sequential returns
 		$twitter->expects($this->any())
-			->method('statusesUserTimeline')
-			->willReturnOnConsecutiveCalls($this->arrayOfTweets, array());
+			->method('statusesUserTimelinePage')
+			->willReturnOnConsecutiveCalls(
+				array('tweets' => $this->arrayOfTweets, 'next_token' => 'next'),
+				array('tweets' => array(), 'next_token' => null)
+			);
 
 		return $twitter;
 
@@ -208,8 +211,11 @@ class ArchiverTest extends \PHPUnit\Framework\TestCase {
 
 		// Use willReturnOnConsecutiveCalls for sequential returns
 		$twitter->expects($this->any())
-			->method('statusesUserTimeline')
-			->willReturnOnConsecutiveCalls(array($this->latestTweet), array());
+			->method('statusesUserTimelinePage')
+			->willReturnOnConsecutiveCalls(
+				array('tweets' => array($this->latestTweet), 'next_token' => 'next'),
+				array('tweets' => array(), 'next_token' => null)
+			);
 
 		return $twitter;
 
@@ -226,15 +232,15 @@ class ArchiverTest extends \PHPUnit\Framework\TestCase {
 		$callCount = 0;
 		$arrayOfTweets = $this->arrayOfTweets;
 		$twitter->expects($this->any())
-			->method('statusesUserTimeline')
+			->method('statusesUserTimelinePage')
 			->willReturnCallback(function() use (&$callCount, $arrayOfTweets) {
 				$callCount++;
 				if ($callCount === 1) {
-					return $arrayOfTweets;
+					return array('tweets' => $arrayOfTweets, 'next_token' => 'next');
 				} elseif ($callCount === 2) {
-					throw new \Exception('Fake Twitter API Exception!');
+					throw new \Exception('Fake X API Exception!');
 				} else {
-					return array();
+					return array('tweets' => array(), 'next_token' => null);
 				}
 			});
 
@@ -251,15 +257,15 @@ class ArchiverTest extends \PHPUnit\Framework\TestCase {
 
 		// Calling $twitter->statusesUserTimeline() will return an empty array
 		$twitter->expects($this->any())
-			->method('statusesUserTimeline')
-			->willReturn(array());
+			->method('statusesUserTimelinePage')
+			->willReturn(array('tweets' => array(), 'next_token' => null));
 
 		return $twitter;
 
 	}
 
 	/**
-	 * Sets the mock Twitter object to return 200 tweets, then zero
+	 * Sets the mock Twitter object to return 200 posts, then zero
 	 */
 	protected function getTwitterReturns200Tweets() {
 
@@ -272,8 +278,11 @@ class ArchiverTest extends \PHPUnit\Framework\TestCase {
 
 		// Use willReturnOnConsecutiveCalls for sequential returns
 		$twitter->expects($this->any())
-			->method('statusesUserTimeline')
-			->willReturnOnConsecutiveCalls($lotsOfTweets, array());
+			->method('statusesUserTimelinePage')
+			->willReturnOnConsecutiveCalls(
+				array('tweets' => $lotsOfTweets, 'next_token' => 'next'),
+				array('tweets' => array(), 'next_token' => null)
+			);
 
 		return $twitter;
 
